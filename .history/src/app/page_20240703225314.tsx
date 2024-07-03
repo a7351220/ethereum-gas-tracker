@@ -1,6 +1,6 @@
 'use client'
 
-import { useState} from 'react'
+import { useState, useEffect } from 'react'
 import ContractList from '@/components/ContractList'
 import ContractAnalysis from '@/components/ContractAnalysis'
 import ErrorModal from '@/components/ErrorModal'

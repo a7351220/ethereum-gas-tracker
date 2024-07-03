@@ -1,6 +1,6 @@
 'use client'
 
-import { useState} from 'react'
+import { useState, useEffect } from 'react'
 import ContractList from '@/components/ContractList'
 import ContractAnalysis from '@/components/ContractAnalysis'
 import ErrorModal from '@/components/ErrorModal'
@@ -55,31 +55,13 @@ export default function Home() {
     setApiKeysSubmitted(true);
   };
 
-  const handleResetApiKeys = () => {
-    setApiKeys({ etherscan: '', openai: '' });
-    setApiKeysSubmitted(false);
-    setContracts(null);
-    setSelectedContract(null);
-  };
-
   return (
     <main className="container mx-auto py-10 px-4 bg-gray-100 min-h-screen">
       <header className="mb-8 text-center">
         <h1 className="text-5xl font-bold mb-4 text-gray-800">Ethereum Gas Tracker</h1>
         <p className="text-gray-600">Sponsored by MetaMask</p>
       </header>
-      {!apiKeysSubmitted ? (
-        <ApiKeyInput onApiKeysSubmit={handleApiKeysSubmit} />
-      ) : (
-        <div className="text-center mb-4">
-          <button
-            onClick={handleResetApiKeys}
-            className="bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-gray-600 transition-all duration-300"
-          >
-            Reset API Keys
-          </button>
-        </div>
-      )}
+      <ApiKeyInput onApiKeysSubmit={handleApiKeysSubmit} />
       {apiKeysSubmitted && (
         <div className="text-center mb-8">
           <FetchButton isLoading={isLoading} fetchHighGasContracts={fetchHighGasContracts} />

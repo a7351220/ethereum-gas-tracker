@@ -1,0 +1,41 @@
+/* globals.css */
+
+/* Reset some default styling */
+body, h1, h2, h3, h4, h5, h6, p, div, button {
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.bg-gray-800 {
+  background-color: #2d2d2d;
+}
+
+.bg-gray-600 {
+  background-color: #4a4a4a;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}

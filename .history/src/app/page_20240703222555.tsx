@@ -1,6 +1,6 @@
 'use client'
 
-import { useState} from 'react'
+import { useState, useEffect } from 'react'
 import ContractList from '@/components/ContractList'
 import ContractAnalysis from '@/components/ContractAnalysis'
 import ErrorModal from '@/components/ErrorModal'
@@ -9,22 +9,16 @@ import LoadingSpinner from '@/components/LoadingSpinner'
 import ApiKeyInput from '@/components/ApiKeyInput'
 import { Contract } from '@/types'
 
-interface ApiKeys {
-  etherscan: string;
-  openai: string;
-}
-
 export default function Home() {
   const [contracts, setContracts] = useState<Contract[] | null>(null);
   const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [apiKeys, setApiKeys] = useState<ApiKeys>({ etherscan: '', openai: '' });
-  const [apiKeysSubmitted, setApiKeysSubmitted] = useState(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
 
   const fetchHighGasContracts = async () => {
-    if (!apiKeys.etherscan) {
-      setError('Please enter and submit an Etherscan API key.');
+    if (!apiKey) {
+      setError('Please enter an Etherscan API key.');
       return;
     }
 
@@ -36,7 +30,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ etherscanApiKey: apiKeys.etherscan }),
+        body: JSON.stringify({ apiKey }),
       });
       const data = await response.json();
       if (data.error) {
@@ -50,16 +44,8 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  const handleApiKeysSubmit = (newApiKeys: ApiKeys) => {
-    setApiKeys(newApiKeys);
-    setApiKeysSubmitted(true);
-  };
-
-  const handleResetApiKeys = () => {
-    setApiKeys({ etherscan: '', openai: '' });
-    setApiKeysSubmitted(false);
-    setContracts(null);
-    setSelectedContract(null);
+  const handleApiKeyChange = (newApiKey: string) => {
+    setApiKey(newApiKey);
   };
 
   return (
@@ -68,26 +54,13 @@ export default function Home() {
         <h1 className="text-5xl font-bold mb-4 text-gray-800">Ethereum Gas Tracker</h1>
         <p className="text-gray-600">Sponsored by MetaMask</p>
       </header>
-      {!apiKeysSubmitted ? (
-        <ApiKeyInput onApiKeysSubmit={handleApiKeysSubmit} />
-      ) : (
-        <div className="text-center mb-4">
-          <button
-            onClick={handleResetApiKeys}
-            className="bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-gray-600 transition-all duration-300"
-          >
-            Reset API Keys
-          </button>
-        </div>
-      )}
-      {apiKeysSubmitted && (
-        <div className="text-center mb-8">
-          <FetchButton isLoading={isLoading} fetchHighGasContracts={fetchHighGasContracts} />
-        </div>
-      )}
+      <ApiKeyInput onApiKeyChange={handleApiKeyChange} />
+      <div className="text-center mb-8">
+        <FetchButton isLoading={isLoading} fetchHighGasContracts={fetchHighGasContracts} />
+      </div>
       {error && <ErrorModal error={error} />}
       {isLoading && <LoadingSpinner />}
-      {!isLoading && !contracts && apiKeysSubmitted && (
+      {!isLoading && !contracts && (
         <div className="text-center">
           <img src="/assets/no-data.svg" alt="No data" className="mx-auto mb-4 w-1/2" />
           <p className="text-gray-500">Click the button to fetch high gas contracts.</p>
@@ -96,7 +69,7 @@ export default function Home() {
       {contracts && (
         <>
           <ContractList contracts={contracts} onSelectContract={setSelectedContract} />
-          {selectedContract && <ContractAnalysis contract={selectedContract} apiKeys={apiKeys} />}
+          {selectedContract && <ContractAnalysis contract={selectedContract} />}
         </>
       )}
     </main>
