@@ -2,6 +2,8 @@
 
 Ethereum Gas Tracker is a web application that helps users identify and analyze high gas-consuming smart contracts on the Ethereum network. This tool is designed for developers, researchers, and cryptocurrency enthusiasts who want to stay informed about gas usage trends and potentially optimize their own smart contracts.
 
+https://github.com/a7351220/ethereum-gas-tracker/assets/64185482/ee93ae29-360a-4282-a055-726050bc3661
+
 ## Features
 
 - Fetch and display top gas-consuming contracts
